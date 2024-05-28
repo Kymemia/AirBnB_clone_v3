@@ -39,7 +39,8 @@ def internal_server_error(error):
 
 
 if __name__ == '__main__':
-    logging.basicConfig(filename='hbnb_api.log', level=app.config['LOGLEVEL'])  # Configure logging
+    """configure logging definition"""
+    logging.basicConfig(filename='hbnb_api.log', level=app.config['LOGLEVEL'])
 
     HBNB_API_HOST = getenv("HBNB_API_HOST", '0.0.0.0')
     HBNB_API_PORT = int(getenv("HBNB_API_PORT", 5000))
