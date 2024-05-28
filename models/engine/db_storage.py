@@ -8,6 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from models.base_model import Base
 
+
 class DBStorage:
     """Interacts with the MySQL database"""
     __engine = None
@@ -64,7 +65,7 @@ class DBStorage:
 
     def reload(self):
         """Reloads data from the database"""
-        from models.base_model import Base  # Import here to avoid circular imports
+        from models.base_model import Base
         from models.amenity import Amenity
         from models.city import City
         from models.place import Place
@@ -85,11 +86,12 @@ class DBStorage:
         self.__session.remove()
 
     def get(self, cls, id):
-        """Returns the object based on the class and its ID, or None if not found"""
+        """Returns the object based on the class and its ID,
+        or None if not found"""
         if cls and id:
             return self.__session.query(cls).filter_by(id=id).first()
         return None
-    
+
     def count(self, cls=None):
         """Returns the number of objects in storage matching the given class.
         If no class is passed, returns the count of all objects in storage.
@@ -106,4 +108,9 @@ class DBStorage:
         }
         if cls:
             return self.__session.query(cls).count()
-        return sum(self.__session.query(cls).count() for cls in classes.values())
+
+        class_counts = (
+                self.__session.query(cls).count()
+                for cls in classes.values()
+                )
+        return sum(class_counts)
